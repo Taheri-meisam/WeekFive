@@ -72,7 +72,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PawnMesh)
 	class UCameraComponent* MainCamera;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PawnMesh)
+	float speed;
+	FVector NewLocation;
 
 
 

@@ -24,8 +24,13 @@ APlayerPawn::APlayerPawn()
 	SpringArm->TargetArmLength = 800.f;
 	SpringArm->bEnableCameraLag = true;
 	SpringArm->CameraLagSpeed = 0.2;
+	
 	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
 	MainCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+	SpringArm->SetupAttachment(RootComponent);
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
+	speed = 8.f;
+	NewLocation =FVector::Zero();
 
 	
 }
@@ -86,14 +91,26 @@ void APlayerPawn::PauseMenu(const FInputActionValue& val)
 
 void APlayerPawn::TwoPressed(const FInputActionValue& val)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::FString(" Two key is being pressed !!!"));
+	const bool value = val.Get<bool>();
+	if (value) {
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::FString(" Two key is being pressed !!!"));
+	}
+	
 }
 
 void APlayerPawn::MoveForward(const FInputActionValue& val) {
 	//FVector2D moveVector = val.Get<FVector2d>();
 	const float dirVal = val.Get<float>();
+
 	if (dirVal) {
-		//Mesh->MoveComponent()
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::FString("forward key is pressed !!!") + FString::SanitizeFloat(dirVal));
+
+		
+		//NewLocation = GetActorLocation() + (dirVal * GetWorld()->GetDeltaSeconds()) * speed;
+		//SetActorRelativeLocation(NewLocation);
+		//
+
 	}
+
+
 }
