@@ -39,6 +39,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UInputAction* IA_Pause;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
+	class UInputAction* IA_Forward;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
+	UStaticMeshComponent* Mesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UUserWidget* MenuWidget;
-
+	UFUNCTION(BlueprintCallable, Category = Properties)
+	void MoveForward(const FInputActionValue& val);
 };
