@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
-
 #include "Components/InputComponent.h"
+#include "InputActionValue.h"
 #include "PlayerPawn.generated.h"
+
+class USpringArmComponent;
 
 UCLASS()
 class WEEK5_API APlayerPawn : public APawn
@@ -27,13 +29,25 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
 	UFUNCTION(BlueprintCallable, Category = Properties)
 		void OnePressed(const FInputActionValue& val);
 	UFUNCTION(BlueprintCallable, Category = Properties)
 		void PauseMenu(const FInputActionValue& val);
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UInputMappingContext* IMCinput;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
+	class UInputAction* IA_Two;
+	UFUNCTION(BlueprintCallable, Category = Functions)
+	void TwoPressed(const FInputActionValue& val);
+
+
+
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UInputAction* IA_One;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
@@ -41,9 +55,25 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UInputAction* IA_Forward;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
-	UStaticMeshComponent* Mesh;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = InputSystem)
 	class UUserWidget* MenuWidget;
 	UFUNCTION(BlueprintCallable, Category = Properties)
-	void MoveForward(const FInputActionValue& val);
+		void MoveForward(const FInputActionValue& val);
+
+
+
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PawnMesh)
+	UStaticMeshComponent* Mesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PawnMesh)
+	USpringArmComponent* SpringArm;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = PawnMesh)
+	class UCameraComponent* MainCamera;
+
+	
+
+
+
 };

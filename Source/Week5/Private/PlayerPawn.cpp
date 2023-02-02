@@ -2,10 +2,15 @@
 
 
 #include "PlayerPawn.h"
+//Input component 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+//UI
 #include "Blueprint/UserWidget.h"
-#include "InputActionValue.h"
+//camera 
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
+
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -14,6 +19,14 @@ APlayerPawn::APlayerPawn()
 	PrimaryActorTick.bCanEverTick = true;
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->SetRelativeRotation(FRotator(-35.f, 0.f, 0.f));
+	SpringArm->TargetArmLength = 800.f;
+	SpringArm->bEnableCameraLag = true;
+	SpringArm->CameraLagSpeed = 0.2;
+	MainCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("MainCamera"));
+	MainCamera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);
+
 	
 }
 
@@ -21,10 +34,10 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	Super::BeginPlay();
 	APlayerController* PlayerController = Cast<APlayerController>(Controller);
 	if (PlayerController) {
-		if (UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer())) {
+		UEnhancedInputLocalPlayerSubsystem* subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+		if (subsystem) {
 			subsystem->AddMappingContext(IMCinput, 0);
 
 		}
@@ -46,10 +59,8 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhanceInputCom->BindAction(IA_One, ETriggerEvent::Started, this, &APlayerPawn::OnePressed);
 		EnhanceInputCom->BindAction(IA_Pause, ETriggerEvent::Started, this, &APlayerPawn::PauseMenu);
 		EnhanceInputCom->BindAction(IA_Forward, ETriggerEvent::Started, this, &APlayerPawn::MoveForward);
+		EnhanceInputCom->BindAction(IA_Two, ETriggerEvent::Started, this, &APlayerPawn::TwoPressed);
 	}
-
-
-
 }
 
 void APlayerPawn::OnePressed(const FInputActionValue& val)
@@ -71,6 +82,11 @@ void APlayerPawn::PauseMenu(const FInputActionValue& val)
 		UE_LOG(LogTemp, Warning, TEXT("Del Pressed !!!"));
 	}
 
+}
+
+void APlayerPawn::TwoPressed(const FInputActionValue& val)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::FString(" Two key is being pressed !!!"));
 }
 
 void APlayerPawn::MoveForward(const FInputActionValue& val) {
