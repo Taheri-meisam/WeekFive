@@ -12,7 +12,9 @@ APlayerPawn::APlayerPawn()
 {
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
+	RootComponent = Mesh;
+	
 }
 
 // Called when the game starts or when spawned
@@ -43,6 +45,7 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 	if (UEnhancedInputComponent* EnhanceInputCom = CastChecked<UEnhancedInputComponent>(PlayerInputComponent)) {
 		EnhanceInputCom->BindAction(IA_One, ETriggerEvent::Started, this, &APlayerPawn::OnePressed);
 		EnhanceInputCom->BindAction(IA_Pause, ETriggerEvent::Started, this, &APlayerPawn::PauseMenu);
+		EnhanceInputCom->BindAction(IA_Forward, ETriggerEvent::Started, this, &APlayerPawn::MoveForward);
 	}
 
 
@@ -70,3 +73,11 @@ void APlayerPawn::PauseMenu(const FInputActionValue& val)
 
 }
 
+void APlayerPawn::MoveForward(const FInputActionValue& val) {
+	//FVector2D moveVector = val.Get<FVector2d>();
+	const float dirVal = val.Get<float>();
+	if (dirVal) {
+		//Mesh->MoveComponent()
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Blue, FString::FString("forward key is pressed !!!") + FString::SanitizeFloat(dirVal));
+	}
+}
